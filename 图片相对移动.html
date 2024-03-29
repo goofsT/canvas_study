@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="600" height="400" id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let endX = 0;
+        let positionX = 250;
+        let hillX = -300;
+        let positionY = 300;
+        let moveStep = 1.5
+        let hillStep = 0.8
+        const img = new Image();
+        const imgHill = new Image();
+        // 创建两个Promise，分别对应两个图像的加载
+        const imgPromise = new Promise((resolve, reject) => {
+            img.onload = () => resolve('猪.png loaded');
+            img.onerror = () => reject(new Error('猪.png failed to load'));
+        });
+        const imgHillPromise = new Promise((resolve, reject) => {
+            imgHill.onload = () => resolve('hill.jpg loaded');
+            imgHill.onerror = () => reject(new Error('hill.jpg failed to load'));
+        });
+        Promise.all([imgPromise, imgHillPromise]).then((values) => {
+            render();
+        }).catch((error) => {
+            console.log(error);
+        });
+        img.src = './assets/猪.png';
+        imgHill.src = './assets/hill.jpg';
+
+        canvas.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const { left, top } = canvas.getBoundingClientRect();
+            endX = clientX - left;
+            endY = clientY - top;
+            if (clientX > 305) {
+                positionX -= moveStep
+                hillX += hillStep
+            } else {
+                positionX += moveStep
+                hillX -= hillStep
+            }
+            moveStep = Math.max(1, moveStep - 0.01)
+            hillStep = Math.max(0.5, hillStep - 0.01)
+        });
+        canvas.addEventListener('mouseleave', (e) => {
+            const { clientX, clientY } = e;
+            const { left, top } = canvas.getBoundingClientRect();
+            endX = clientX - left;
+            endY = clientY - top;
+            positionX = 250;
+            hillX = -300;
+            moveStep = 1.5
+            hillStep = 0.8
+        });
+
+        function reset() {
+            if (hillX !== -300) {
+                if (hillX > 0) {
+                    hillX = hillX - 1;
+                } else {
+                    hillX = hillX + 1;
+                }
+            }
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(imgHill, hillX, 0, 1000, 900);
+            ctx.drawImage(img, positionX, positionY, 100, 100);
+            requestAnimationFrame(render); // 循环调用自己，创建动画效果
+        }
+
+
+
+    </script>
+</body>
+
+</html>
