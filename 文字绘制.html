@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="600" height="400" id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // 初始化颜色值
+        let r = 255;
+        let g = 0;
+        let b = 0;
+
+        // 目标颜色值
+        let targetR = Math.floor(Math.random() * 256);
+        let targetG = Math.floor(Math.random() * 256);
+        let targetB = Math.floor(Math.random() * 256);
+
+
+        // 每帧颜色变化的步长
+        const step = 3;
+
+        ctx.font = '100px Arial bold';
+        ctx.shadowColor = 'rgba(56,65,3,0.5)';
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        ctx.shadowBlur = 2;
+
+        // 创建线性渐变
+        const lineargradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+        lineargradient.addColorStop(0, 'red');
+        lineargradient.addColorStop(0.5, 'yellow');
+        ctx.fillStyle = lineargradient;
+        ctx.strokeStyle = 'red';
+
+        const updateColor = () => {
+            // 线性插值调整当前颜色向目标颜色靠近
+            if (r < targetR) r += step;
+            else if (r > targetR) r -= step;
+            if (g < targetG) g += step;
+            else if (g > targetG) g -= step;
+            if (b < targetB) b += step;
+            else if (b > targetB) b -= step;
+            // 如果当前颜色接近目标颜色，选择一个新的目标颜色
+            if (Math.abs(r - targetR) < step && Math.abs(g - targetG) < step && Math.abs(b - targetB) < step) {
+                targetR = Math.floor(Math.random() * 256);
+                targetG = Math.floor(Math.random() * 256);
+                targetB = Math.floor(Math.random() * 256);
+            }
+        };
+
+        const render = (time) => {
+            updateColor();
+
+            // 设置填充和轮廓颜色
+            ctx.fillStyle = `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillText('Canvas', 100, 200);
+            ctx.strokeText('Canvas', 100, 300);
+            requestAnimationFrame(render);
+        }
+
+        render()
+
+
+
+
+    </script>
+</body>
+
+</html>

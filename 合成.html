@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #canvas1 {
+            position: absolute;
+            top: 400px;
+            left: 0;
+            z-index: 1;
+        }
+
+        .img {
+            position: absolute;
+            top: 400px;
+            left: 0;
+            z-index: -1;
+            width: 600px;
+            height: 400px;
+            border: 1px solid red;
+        }
+
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="600" height="400" id="canvas"></canvas>
+    <canvas width="600" height="400" id="canvas1"></canvas>
+    <div class="img">
+        <img src="./assets/p.jpg" alt="" style="width:100%;height:100%">
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const canvas1 = document.getElementById('canvas1');
+        const ctx1 = canvas1.getContext('2d');
+        /*
+        /*
+            globalCompositeOperation = type
+            type: source-over, source-atop, source-in, source-out, destination-over, destination-atop, destination-in, destination-out, lighter, copy, xor
+            source-over: 默认值，新图形绘制在原有图形之上
+            source-atop: 新图形绘制在原有图形之上，重叠部分取两者交集
+            source-in: 新图形绘制在原有图形之上，重叠部分取原有图形
+            source-out: 新图形绘制在原有图形之上，重叠部分取原有图形之外
+            destination-over: 新图形绘制在原有图形之下
+            destination-atop: 新图形绘制在原有图形之下，重叠部分取两者交集
+            destination-in: 新图形绘制在原有图形之下，重叠部分取新图形
+            destination-out: 新图形绘制在原有图形之下，重叠部分取新图形之外
+            lighter: 重叠部分颜色取两者之和
+            copy: 只绘制新图形
+            xor: 重叠部分取两者之外
+        */
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = 'red';
+        ctx.fillRect(10, 10, 50, 50);
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(50, 50, 50, 50);
+
+
+        //文字刮刮乐
+        ctx1.globalCompositeOperation = 'source-over';
+        const img = new Image();
+        img.src = './assets/p.jpg';
+        img.onload = function () {
+            ctx1.drawImage(img, 0, 0, 600, 400);
+            ctx1.fillStyle = 'gray';
+            ctx1.fillRect(0, 0, 600, 400);
+            ctx1.font = '50px Arial bold';
+            ctx1.fillStyle = 'red';
+            ctx1.fillText('刮刮乐', 200, 200);
+            ctx1.globalCompositeOperation = 'destination-out';//保证橡皮擦效果
+            //通过鼠标移动事件来重新绘制圆形 来达到擦除效果
+            canvas1.onmousemove = function (e) {
+                ctx1.beginPath();
+                ctx1.arc(e.offsetX, e.offsetY, 30, 0, Math.PI * 2);
+                ctx1.fill();
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

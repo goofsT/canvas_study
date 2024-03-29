@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="600" height="400" id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = 'red';
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(200, 100);//平移
+        //二维矩阵变换 绕原点旋转30度
+        const sin = Math.sin(Math.PI / 6);
+        const cos = Math.cos(Math.PI / 6);
+        ctx.transform(cos, sin, -sin, cos, 0, 0);
+        // 绘制矩形，由于坐标系已经移动到了矩形的中心，因此绘制起点为矩形尺寸的一半的负值
+        ctx.fillRect(-50, -50, 100, 100);
+
+
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);//恢复初始状态
+        //创建直角三角形
+        ctx.rotate(Math.PI / 4);//旋转45度 绕原点（左上角）
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(50, 0);
+        ctx.lineTo(0, 50);
+        ctx.closePath();
+        ctx.fillStyle = 'blue';
+        ctx.fill();
+
+
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);//恢复初始状态
+        ctx.translate(400, 100);//平移坐标系
+        for (var i = 1; i < 6; i++) {
+            ctx.save();
+            ctx.fillStyle = 'rgb(' + (30 * i) + ',' + (255 - 30 * i) + ',255)';
+            for (var j = 0; j < i * 6; j++) {
+                ctx.rotate(Math.PI * 2 / (i * 6));
+                ctx.beginPath();
+                ctx.arc(0, i * 12.5, 5, 0, Math.PI * 2, true);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
