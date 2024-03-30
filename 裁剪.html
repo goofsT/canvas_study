@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="600" height="400" id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        /*
+        clip:将当前正在构建的路径转换为当前的裁剪路径
+        在下面的例子中，我们首先绘制一个红色的矩形，
+        然后创建一个圆形的裁剪区域，最后绘制一个渐变的矩形。
+        由于裁剪区域是圆形的，所以只有在圆形区域内的部分的。
+        */
+        ctx.fillStyle = 'red';
+        ctx.fillRect(0, 0, 600, 400);
+
+        //创建一个圆形的裁剪区域
+        ctx.beginPath();
+
+        //参数：圆心x，圆心y，半径，起始角度，结束角度
+        ctx.arc(270, 220, 100, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.clip();
+        //参数：x，y，宽，高
+        const linegrad = ctx.createLinearGradient(0, 0, 600, 400);
+        linegrad.addColorStop(0, '#232256');
+        linegrad.addColorStop(1, '#143778');
+        ctx.fillStyle = linegrad;
+        ctx.fillRect(0, 0, 600, 400);
+
+        for (let i = 0; i < 100; i++) {
+            drawStart();
+        }
+
+        function drawStart() {
+            ctx.save();
+            ctx.beginPath();
+            // 移动到随机位置
+            ctx.translate(Math.random() * 600, Math.random() * 400);
+            ctx.rotate(Math.random() * Math.PI * 2);
+            ctx.scale(0.5, 0.5);
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.lineJoin = 'round';
+
+            let outerRadius = 10; // 外圆半径
+            let innerRadius = outerRadius * Math.sin(Math.PI / 10) / Math.sin(7 * Math.PI / 10); // 内圆半径，根据几何关系计算
+
+            // 绘制五角星
+            for (let i = 0; i < 5; i++) {
+                // 绘制外部点
+                ctx.lineTo(Math.cos((18 + i * 144) * Math.PI / 180) * outerRadius,
+                    -Math.sin((18 + i * 144) * Math.PI / 180) * outerRadius);
+                // 绘制内部点
+                ctx.lineTo(Math.cos((54 + i * 144) * Math.PI / 180) * innerRadius,
+                    -Math.sin((54 + i * 144) * Math.PI / 180) * innerRadius);
+            }
+
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+        }
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="600" height="400" id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        /*
+         ctx.isPointInPath(x, y,fillRule)方法用于检测指定的点是否在当前路径中。
+            fillRule 参数是可选的。它可以是 "nonzero非零环绕算法"、"evenodd奇偶环绕算法" 中的一个
+        
+        ctx.isPointInStroke(path,x, y)方法用于检测指定的点是否在当前路径的描边上。
+             path: 要检测的路径 可选
+        
+
+         第三方库：fabric.js 允许你在 canvas 上创建对象，比如矩形、圆、三角形等等。你可以在这些对象上添加事件监听器，比如鼠标点击事件，鼠标移动事件等等。
+                   paper.js  是一个开源矢量图形脚本框架  轻松地创建复杂的矢量图形。
+      */
+
+
+        ctx.rect(50, 50, 200, 100);
+        ctx.stroke();
+
+        console.log(ctx.isPointInPath(50, 50)); // true
+        console.log(ctx.isPointInPath(50, 50, 'evenodd')); // true
+        console.log(ctx.isPointInPath(50, 50, 'nonzero')); // true
+        console.log(ctx.isPointInStroke(251, 50)); // false
+        console.log(ctx.isPointInStroke(250, 50)); // true
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

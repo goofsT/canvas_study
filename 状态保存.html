@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="600" height="400" id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = 'red';
+        ctx.fillRect(0, 0, 100, 100);
+
+        ctx.save();
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(100, 0, 100, 100);
+
+        ctx.save();
+        ctx.fillStyle = 'green';
+        ctx.fillRect(200, 0, 100, 100);
+        ctx.restore();//恢复为蓝色
+        ctx.restore();//恢复为红色
+
+        ctx.fillRect(300, 0, 100, 100);
+
+
+
+        ctx.save();
+        ctx.fillStyle = 'yellow';
+        ctx.translate(50, 50);
+        ctx.scale(0.5, 0.5);
+        //恢复为原始状态
+        ctx.fillRect(100, 100, 100, 100);
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(200, 100, 100, 100);//此时绘制的矩形依旧是缩小的
+        ctx.restore();//恢复为红色正常大小
+        ctx.fillRect(200, 100, 100, 100);//此时绘制的矩形是原始大小
+
+
+
+
+
+    </script>
+</body>
+
+</html>

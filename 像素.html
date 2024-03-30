@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="600" height="400" id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const img = new Image();
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0, 500, 500);
+            //获取图片数据
+            const imgData = ctx.getImageData(0, 0, 500, 500);
+            imgData.data.forEach((item, index) => {
+                //index % 4 === 0 代表红色通道
+                //index % 4 === 1 代表绿色通道
+                //index % 4 === 2 代表蓝色通道
+                //index % 4 === 3 代表透明通道
+                //每组四个值代表一个像素点的rgba值
+                if (index % 4 === 0) {
+                    //将红色通道的值取反
+                    imgData.data[index] = 255 - imgData.data[index];
+                }
+            })
+            ctx.putImageData(imgData, 0, 0, 200, 300, 500, 500);
+
+        }
+        img.src = './assets/猪.png'
+
+
+
+
+    </script>
+</body>
+
+</html>
